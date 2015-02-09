@@ -103,9 +103,7 @@ leafletMap <- function(
       tags$head(
         tags$link(rel="stylesheet", type="text/css", href="leaflet/leaflet.css"),
         tags$script(src="leaflet/leaflet.js"),
-        tags$script(src="leaflet/binding.js"),
-        tags$script(src="leaflet/proj4-compressed.js"),
-        tags$script(src="leaflet/proj4leaflet.js")
+        tags$script(src="leaflet/binding.js")
       )
     ),
     tags$div(
