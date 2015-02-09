@@ -182,6 +182,7 @@ var dataframe = (function() {
         map.shapes = new LayerStore(map);
         map.popups = new LayerStore(map);
         map.geojson = new LayerStore(map);
+        map.overlays = new LayerStore(map);
         
         // When the map is clicked, send the coordinates back to the app
         map.on('click', function(e) {
@@ -191,6 +192,7 @@ var dataframe = (function() {
             '.nonce': Math.random() // Force reactivity if lat/lng hasn't changed
           });
         });
+            
         
         // Send bounds info back to the app
         function updateBounds() {
@@ -294,6 +296,10 @@ var dataframe = (function() {
   methods.clearShapes = function() {
     this.shapes.clear();
   };
+  
+   methods.clearOverlay = function() {
+    this.overlays.clear();
+  };
 
   methods.clearGeoJSON = function() {
     this.geojson.clear();
@@ -331,6 +337,35 @@ var dataframe = (function() {
     }
   };
   
+
+methods.addOverlay = function(lat1, lng1, lat2, lng2, imgUrl, layerId, options, eachOptions) {
+    var df = dataframe.create()
+      .col('lat1', lat1)
+      .col('lng1', lng1)
+      .col('lat2', lat2)
+      .col('lng2', lng2)
+      .col('imgUrl',imgUrl)
+      .col('layerId', layerId)
+      .cbind(options)
+      .cbind(eachOptions);
+    for (var i = 0; i < df.nrow(); i++) {
+      (function() {
+        var overlay = L.imageOverlay(df.get(i,'imgUrl'),
+          [
+            [df.get(i, 'lat1'), df.get(i, 'lng1')],
+            [df.get(i, 'lat2'), df.get(i, 'lng2')]
+          ],
+          df.get(i));
+        var thisId = df.get(i, 'layerId');
+        this.overlays.add(overlay, thisId);
+        overlay.on('click', mouseHandler(this.id, thisId, 'overlay_click'), this);
+        overlay.on('mouseover', mouseHandler(this.id, thisId, 'overlay_mouseover'), this);
+        overlay.on('mouseout', mouseHandler(this.id, thisId, 'overlay_mouseout'), this);
+      }).call(this);
+    }
+  };
+
+
   /*
    * @param lat Array of latitude coordinates for polygons; different
    *   polygons are separated by null.

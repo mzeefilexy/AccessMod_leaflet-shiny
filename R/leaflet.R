@@ -67,9 +67,10 @@ createLeafletMap <- function(session, outputId) {
     stub(addMarker(lat, lng, layerId=NULL, options=list(), eachOptions=list())),
     stub(addCircleMarker(lat, lng, radius, layerId = NULL, options = list(), eachOptions=list())),
     stub(clearMarkers()),
-    stub(fitBounds(lat1, lng1, lat2, lng2)),
+    stub(fitBounds(lat1, lng1, lat2, lng2)),  
     stub(addCircle(lat, lng, radius, layerId = NULL, options=list(), eachOptions=list())),
     stub(addRectangle(lat1, lng1, lat2, lng2, layerId = NULL, options=list(), eachOptions=list())),
+    stub(addOverlay(lat1,lng1,lat2,lng2,imgUrl,layerId = NULL, options=list(), eachOptions=list())),
     stub(addPolygon(lat, lng, layerId, options, defaultOptions)),
     stub(addGeoJSON(data, layerId)),
     stub(clearGeoJSON()),
@@ -102,7 +103,9 @@ leafletMap <- function(
       tags$head(
         tags$link(rel="stylesheet", type="text/css", href="leaflet/leaflet.css"),
         tags$script(src="leaflet/leaflet.js"),
-        tags$script(src="leaflet/binding.js")
+        tags$script(src="leaflet/binding.js"),
+        tags$script(src="leaflet/proj4-compressed.js"),
+        tags$script(src="leaflet/proj4leaflet.js")
       )
     ),
     tags$div(
