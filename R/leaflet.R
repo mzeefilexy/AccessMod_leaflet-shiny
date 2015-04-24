@@ -114,7 +114,7 @@ leafletMap <- function(
       
       tags$script(
         type="application/json", class="leaflet-options",
-        ifelse(is.null(options), "{}", RJSONIO::toJSON(options))
+        ifelse(is.null(options), "{}", jsonlite::toJSON(options))
       )
     )
   )
